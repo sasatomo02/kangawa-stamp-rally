@@ -1,8 +1,6 @@
 package com.example.kangawa_stamp_rally.controller;
 
-import com.example.kangawa_stamp_rally.dto.GetStampDto;
-import com.example.kangawa_stamp_rally.dto.QuizDto;
-import com.example.kangawa_stamp_rally.dto.ReturnStampInfoDto;
+import com.example.kangawa_stamp_rally.dto.*;
 import com.example.kangawa_stamp_rally.repository.QuizRepository;
 import com.example.kangawa_stamp_rally.service.GetStampService;
 import com.example.kangawa_stamp_rally.service.LogService;
@@ -36,16 +34,16 @@ public class MainController {
 
     /**
      * 初回登録をするController
-     * @param uuid　フロントで発行されるUUID
+     * @param dto　フロントで発行されるUUID
      * @param username ユーザの決める任意な名前
      * &#064;return　成功:Responce.OK  失敗:400 登録済みのIDです
      */
     @PostMapping("/user")
-    public ResponseEntity<String> userAdd(@RequestParam("uuid") String uuid,
+    public ResponseEntity<String> userAdd(@RequestBody RequestUserDto dto,
                                           String username){
         logService.connectLog("user");
         try{
-            userService.userAdd(uuid,username);
+            userService.userAdd(dto.getUuid(),username);
             return ResponseEntity.ok("ユーザーが正常に追加されました");
 
         }catch (Exception e){
@@ -56,16 +54,15 @@ public class MainController {
     //TOP画面
     @GetMapping("/top")
     public List<ReturnStampInfoDto> top(@RequestParam("uuid") String uuid) {
-        logService.connectLog("top");
+        logService.connectLogWithUUID("top",uuid);
         return getStampService.getAcquiredStampsWithUrls(uuid);
     }
 
     //スタンプ登録
     @PostMapping("/add")
-    public ReturnStampInfoDto add(@RequestParam("uuid") String uuid,
-                                  @RequestParam("stampId") String stampId) {
-        logService.connectLog("add");
-        return getStampService.addStampToDb(uuid, stampId);
+    public ReturnStampInfoDto add(@RequestBody RequeatAddDto dto) {
+        logService.connectLogWithUUID("add", dto.getUuid());
+        return getStampService.addStampToDb(dto.getUuid(), dto.getStampId());
     }
 
     //クイズ取得

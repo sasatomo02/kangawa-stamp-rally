@@ -20,16 +20,12 @@ import java.nio.file.Paths;
 @RequestMapping("/api/stamps/images")
 public class StampImageController {
 
-    private final Path fileStorageLocation; // Path型で保持する
-    // private final AppProperties appProperties; // もし他のプロパティも使うなら保持
+    private final Path fileStorageLocation;
 
-    // コンストラクタインジェクションでAppPropertiesを受け取る
     public StampImageController(AppProperties appProperties) {
-        // AppPropertiesから設定値を読み込み、Pathオブジェクトを初期化
-        this.fileStorageLocation = Paths.get(appProperties.getImageStorageLocation()).toAbsolutePath().normalize();
-        // this.appProperties = appProperties; // 必要なら保持
 
-        // ディレクトリの存在確認と作成は、コンストラクタで行う
+        this.fileStorageLocation = Paths.get(appProperties.getImageStorageLocation()).toAbsolutePath().normalize();
+
         try {
             Files.createDirectories(this.fileStorageLocation);
             System.out.println("画像保存ディレクトリ: " + this.fileStorageLocation.toString() + " の存在を確認しました。");
@@ -40,7 +36,6 @@ public class StampImageController {
 
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
-        // ... 以降のロジックは変更なし ...
         try {
             Path filePath = this.fileStorageLocation.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());

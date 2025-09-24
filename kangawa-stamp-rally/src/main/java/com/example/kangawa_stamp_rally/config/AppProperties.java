@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app")
 @Data
 public class AppProperties {
-    // app.image-storage-location プロパティに対応
-    private String imageStorageLocation;
 
-    // app.image-base-url プロパティに対応
+    private String imageStorageLocation;
     private String imageBaseUrl;
 }

@@ -16,6 +16,8 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // 開発・APIテスト用。本番では適切に設定
                 .authorizeHttpRequests(auth -> auth
+
+                        .requestMatchers("/HTML_img/**", "/css/**", "/js/**", "/img/**").permitAll()
                         // 1. CORSプリフライトリクエスト (OPTIONSメソッド) をすべてのパスで許可
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
@@ -36,7 +38,9 @@ public class WebSecurityConfig {
                                 "/swagger-ui/**", // Swagger UIの静的リソースも許可
                                 "/v3/api-docs/**", // OpenAPI SpecificationのJSON/YAMLも許可
                                 "/test", // もし/testというAPIエンドポイントがあるなら
-                                "/user" // もし/userというAPIエンドポイントがあるなら
+                                "/user", // もし/userというAPIエンドポイントがあるなら
+                                "complete",
+                                "events"
                         ).permitAll()
 
                         // 3. 上記以外のすべてのリクエストは認証が必要

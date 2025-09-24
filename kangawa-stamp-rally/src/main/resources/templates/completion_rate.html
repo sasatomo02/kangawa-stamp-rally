@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>complate_late</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-image: url('/HTML_img/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            height: 20%;
+            width: auto;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .completion-container {
+            display: grid;
+            grid-template-rows: 30% 70%;
+            text-align: center;
+            width: 90%;
+            height: 70%;
+            padding: 20px;
+            margin-top: 10%;
+            background-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .rate_text {
+            display: grid;
+            grid-template-rows: auto auto auto;
+            justify-content: center;
+            align-content: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .number.top-number {
+            grid-row: 1;
+            font-size: 190px;
+            text-align: center;
+            transform: translateY(50px) translateX(-180px);
+        }
+
+        .divider {
+            grid-row: 2;
+            position: absolute;
+            left: 50%;
+            width: 300px;
+            height: 5px;
+            background-color: #333;
+            transform: translate(-30%, -50%) rotate(-45deg);
+        }
+
+        .number.bottom-number {
+            grid-row: 3;
+            margin-bottom: 80px;
+            font-size: 125px;
+            text-align: center;
+            transform: translateY(-40px) translateX(225px);
+        }
+    </style>
+</head>
+<body>
+<script>
+    // SSE接続
+    const eventSource = new EventSource('/events');
+
+    // データ受信時
+    eventSource.onmessage = function (event) {
+        try {
+            console.log("SSE受信:", event.data); // ←ここで受信確認
+            const data = JSON.parse(event.data);
+            document.getElementById('userCount').textContent = data.userCount;
+            document.getElementById('completeCount').textContent = data.completeCount;
+        } catch (e) {
+            console.error('SSEデータの解析エラー', e);
+        }
+    };
+
+    // エラー処理
+    eventSource.onerror = function (err) {
+        console.error('SSE接続エラー', err);
+// 必要に応じて再接続処理を追加
+    };
+</script>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;position: relative;">
+    <div class="logo">
+        <img src="/HTML_img/logo.png" alt="logo">
+    </div>
+    <div class="completion-container">
+        <div class="title" style="grid-row: 1; font-size: 80px;">コンプリートたっせいした人の数！</div>
+        <div class="rate_text" style="grid-row: 2;">
+            <div class="number top-number">
+                <span id="completeCount" th:text="${completeCount}">0</span>
+            </div>
+            <div class="divider"></div>
+            <div class="number bottom-number">
+                <span id="userCount" th:text="${userCount}">0</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

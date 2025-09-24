@@ -1,8 +1,10 @@
 // GetStampService.java
 package com.example.kangawa_stamp_rally.service;
 
+import com.example.kangawa_stamp_rally.controller.SseController;
 import com.example.kangawa_stamp_rally.dto.QuizDto;
 import com.example.kangawa_stamp_rally.dto.ReturnStampInfoDto;
+import com.example.kangawa_stamp_rally.dto.UserCountDto;
 import com.example.kangawa_stamp_rally.entity.*;
 import com.example.kangawa_stamp_rally.repository.GetStampRepository;
 import com.example.kangawa_stamp_rally.config.AppProperties; // AppPropertiesをインポート
@@ -13,6 +15,7 @@ import com.github.dozermapper.core.Mapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,11 @@ public class GetStampService {
 
     // フォーマッター
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+    @Autowired
+    private UserCountService userCountService;
+    @Autowired
+    private SseController sseController;
 
 
     public GetStampService(GetStampRepository getStampRepository, StampRepository stampRepository, QuizRepository quizRepository, Mapper mapper, AppProperties appProperties, UserRepository userRepository) {
@@ -81,6 +89,10 @@ public class GetStampService {
 
         GetStampEntity entity = getStampRepository.findById(Id).orElseThrow(
                 () -> new IllegalArgumentException("内部エラー"));
+
+        //SSE検知
+        UserCountDto countDto = userCountService.count();
+        sseController.sendDataUpdate(countDto);
 
         return convertToDtoWithUrl(entity);
     }

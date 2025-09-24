@@ -15,4 +15,10 @@ public class LogService {
         System.out.println(formatter1.format(LocalDateTime.now()) + "  接続完了:" + name );
         System.out.println("----------------------------------------------------------");
     }
+
+    public void connectLogWithUUID(String name,String uuid){
+        System.out.println("----------------------------------------------------------");
+        System.out.println(formatter1.format(LocalDateTime.now()) + "  接続完了:" + name + " uuid:" + uuid);
+        System.out.println("----------------------------------------------------------");
+    }
 }
