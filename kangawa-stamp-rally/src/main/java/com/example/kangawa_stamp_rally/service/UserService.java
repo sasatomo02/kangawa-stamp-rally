@@ -15,15 +15,18 @@ public class UserService {
     private SseController sseController;
 
     public void userAdd(String uuid,String username){
-        if(userRepository.findById(uuid).isPresent()){
-            throw new RuntimeException("登録済みのIDです");
+        if(userRepository.findById(uuid).isEmpty()) {
+            try {
+                UserEntity userEntity = new UserEntity();
+                userEntity.setUuid(uuid);
+                userEntity.setUserName(username);
+                userRepository.save(userEntity);
+                //SSE検知
+                UserCountDto countDto = userCountService.count();
+                sseController.sendDataUpdate(countDto);
+            } catch (Exception e) {
+                throw new RuntimeException("システムエラーが発生しました");
+            }
         }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUuid(uuid);
-        userEntity.setUserName(username);
-        userRepository.save(userEntity);
-        //SSE検知
-        UserCountDto countDto = userCountService.count();
-        sseController.sendDataUpdate(countDto);
     }
 }

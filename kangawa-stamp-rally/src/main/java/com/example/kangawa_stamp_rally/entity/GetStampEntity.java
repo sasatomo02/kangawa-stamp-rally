@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "GET_STAMP") // テーブル名はアンダースコア表記が一般的ですが、大文字でも問題ありません
+@Table(name = "GET_STAMP")
 public class GetStampEntity {
 
     @EmbeddedId // 複合主キーを示す
@@ -28,8 +28,6 @@ public class GetStampEntity {
 
     @Column(name = "DATETIME", nullable = false)
     @CreationTimestamp
-    private LocalDateTime datetime; // Java 8以降の推奨日時型
+    private LocalDateTime datetime;
 
-    // ゲッター、セッターはLombokの@Dataで自動生成されますが、
-    // 必要に応じて手動で追加することもできます。
 }
