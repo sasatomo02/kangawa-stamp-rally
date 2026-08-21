@@ -1,3 +1,4 @@
+/*
 package com.example.kangawa_stamp_rally.controller;
 
 import com.example.kangawa_stamp_rally.config.AppProperties; // 作成した設定クラスをインポート
@@ -23,9 +24,7 @@ public class StampImageController {
     private final Path fileStorageLocation;
 
     public StampImageController(AppProperties appProperties) {
-
         this.fileStorageLocation = Paths.get(appProperties.getImageStorageLocation()).toAbsolutePath().normalize();
-
         try {
             Files.createDirectories(this.fileStorageLocation);
             System.out.println("画像保存ディレクトリ: " + this.fileStorageLocation.toString() + " の存在を確認しました。");
@@ -75,4 +74,4 @@ public class StampImageController {
             return ResponseEntity.internalServerError().build();
         }
     }
-}
+}*/

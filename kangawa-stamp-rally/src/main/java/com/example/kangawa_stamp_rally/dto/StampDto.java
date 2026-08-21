@@ -7,6 +7,7 @@ public class StampDto {
     private String stampNo;
     private String stampName;
     private String stampText;
+    private String stampSubName;
     private String imgName;
     private Integer quizNo;
 }

@@ -67,7 +67,7 @@ public class MainController {
 
     //クイズ取得
     @GetMapping("/quiz")
-    public QuizDto quiz(@RequestParam("stampId") String stampId) {
+    public QuizDto quiz(@RequestParam("stampId" ) String stampId) {
         logService.connectLog("quiz");
         return getStampService.getQuiz(stampId);
     }

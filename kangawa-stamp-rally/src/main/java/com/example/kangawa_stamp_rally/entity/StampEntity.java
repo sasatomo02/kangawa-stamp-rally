@@ -11,6 +11,9 @@ public class StampEntity {
     @Column(name = "STAMP_NO", length = 20)
     private String stampNo;
 
+    @Column(name = "STAMP_SUBNAME", length = 50)
+    private String stampSubName;
+
     @Column(name = "STAMP_NAME", length = 50)
     private String stampName;
 

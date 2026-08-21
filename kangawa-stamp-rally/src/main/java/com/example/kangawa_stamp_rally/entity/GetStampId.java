@@ -7,12 +7,9 @@ import java.util.Objects;
 @Embeddable // エンティティに埋め込み可能なIDクラスであることを示す
 public class GetStampId implements Serializable {
 
-    // ユーザーのUUIDとスタンプのSTAMP_NOをフィールドとして持つ
-    // これらのフィールド名は、UserEntityとStampEntityの主キーのフィールド名と一致させるのが一般的
-    private String uuid; // UserEntityの主キー(UUID)に対応
-    private String stampNo; // StampEntityの主キー(STAMP_NO)に対応
+    private String uuid;
+    private String stampNo;
 
-    // デフォルトコンストラクタはJPAの要件
     public GetStampId() {}
 
     // コンストラクタ
@@ -21,7 +18,6 @@ public class GetStampId implements Serializable {
         this.stampNo = stampNo;
     }
 
-    // --- 非常に重要: hashCode() と equals() を実装する ---
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,7 +32,6 @@ public class GetStampId implements Serializable {
         return Objects.hash(uuid, stampNo);
     }
 
-    // getter と setter
     public String getUuid() { return uuid; }
     public void setUuid(String uuid) { this.uuid = uuid; }
     public String getStampNo() { return stampNo; }

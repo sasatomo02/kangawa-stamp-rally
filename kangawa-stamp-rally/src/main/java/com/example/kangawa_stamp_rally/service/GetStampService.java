@@ -34,7 +34,7 @@ public class GetStampService {
     private final QuizRepository quizRepository;
     @Getter
     private final Mapper mapper;
-    private final String imageBaseUrl;
+    //private final String imageBaseUrl;
     private final UserRepository userRepository;
     @Getter
 
@@ -52,7 +52,7 @@ public class GetStampService {
         this.stampRepository = stampRepository;
         this.quizRepository = quizRepository;
         this.mapper = mapper;
-        this.imageBaseUrl = appProperties.getImageBaseUrl();
+        //this.imageBaseUrl = appProperties.getImageBaseUrl();
         this.userRepository = userRepository;
     }
 
@@ -98,7 +98,7 @@ public class GetStampService {
     }
 
     //クイズ取得
-    public QuizDto getQuiz(String stampId){
+    public QuizDto getQuiz(String stampId) {
         var Id = stampRepository.findById(stampId).orElseThrow(
                 () -> new IllegalArgumentException("不正なスタンプ番号です"));
         QuizEntity entity = quizRepository.findById(Id.getQuizNo()).orElseThrow();
@@ -114,29 +114,30 @@ public class GetStampService {
         }
 
         // --- StampEntityの情報を直接利用 ---
-        StampEntity stamp = getStampEntity.getStamp(); // すでにエンティティとして持っている
-        if (stamp != null) { // nullチェックは重要
+        StampEntity stamp = getStampEntity.getStamp();
+
+        if (stamp != null) {
             dto.setStampName(stamp.getStampName());
             dto.setStampText(stamp.getStampText());
+            dto.setStampSubName(stamp.getStampSubName());
+            dto.setImgPath(stamp.getImgPath());
 
-            // 画像URLの構築
-            String imageFilename = stamp.getImgPath(); // StampEntityのimgPathを利用
+            // 開発環境用
+/*            String imageFilename = stamp.getImgPath();
             if (imageFilename != null && !imageFilename.isEmpty()) {
                 dto.setImgPath(imageBaseUrl + imageFilename);
-            }
+            }*/
 
-            // --- QuizEntityの情報を直接利用し、QuizDtoに変換 ---
-            QuizEntity quiz = quizRepository.findById(stamp.getQuizNo()).orElse(new QuizEntity()); // StampEntityが持つQuizEntityを取得
-            dto.setQuizDto(mapper.map(quiz, QuizDto.class)); // Optionalではなく生のオブジェクトを渡す
+            // --- QuizDtoに変換 ---
+            QuizEntity quiz = quizRepository.findById(stamp.getQuizNo()).orElse(new QuizEntity());
+            dto.setQuizDto(mapper.map(quiz, QuizDto.class));
         }
-
 
         // --- 獲得日時 (LocalDateTime) をStringに変換してセット ---
         if (getStampEntity.getDatetime() != null) {
             dto.setDate(formatter1.format(getStampEntity.getDatetime()));
         } else {
-            // DATETIMEがnullの場合の処理 (DBで自動設定されるので通常はnullにならないはずだが、念のため)
-            dto.setDate(null); // または適切なデフォルト値
+            dto.setDate(null);
         }
 
         return dto;

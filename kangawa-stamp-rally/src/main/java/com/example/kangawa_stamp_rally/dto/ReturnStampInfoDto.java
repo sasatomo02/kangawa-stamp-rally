@@ -5,6 +5,7 @@ import lombok.Data;
 public class ReturnStampInfoDto {
     private String stampNo;
     private String stampName;
+    private String stampSubName;
     private String stampText;
     private String imgPath;
     private QuizDto quizDto;
